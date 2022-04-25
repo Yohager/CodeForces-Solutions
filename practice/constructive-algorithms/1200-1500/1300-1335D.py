@@ -55,40 +55,19 @@ def GMI():
     return map(lambda x: int(x) - 1, input().split())
 
 
-def find(x):
-    cnt = -1 
-    while x:
-        x >>= 1
-        cnt += 1
-    return cnt 
-
-def func(nums):
-    res = 2**32 - 1 
-    for num in nums:
-        res &= num
-    return res 
-
-
-def calc(n,k,nums):
-    cnt = [0] * 32 
-    for i in range(n):
-        for j in range(30,-1,-1):
-            if (nums[i] & (1 << j)):
-                cnt[j] += 1
-    # calculate needed 1 in each bit pos  
-    ans = 0 
-    for i in range(30,-1,-1):
-        tmp = n - cnt[i] 
-        if tmp <= k:
-            k -= tmp 
-            ans += (1 << i)
-    return ans 
-
-
+def calc():
+    pass 
 
 if __name__ == "__main__":
     tn = II()
     for _ in range(tn):
-        n,k = LII()
-        nums = LII()
-        print(calc(n,k,nums))
+        cur = []
+        for _ in range(9):
+            cur.append(list(input()))
+
+        for i in range(9):
+            for j in range(9):
+                if cur[i][j] == '1':
+                    cur[i][j] = '2'
+        for x in cur:
+            print(''.join(x))

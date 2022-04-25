@@ -54,41 +54,46 @@ def LII():
 def GMI():
     return map(lambda x: int(x) - 1, input().split())
 
+def calc(n,k):
+    if n % 2 == 0 and n // 2 >= k:
+        t = n // 2
+        x = t // k 
+        y = t % k
+        ans = [2*x] * k 
+        for i in range(y):
+            ans[i] += 2
+        return ans 
+    elif (n-k) % 2 == 0:
+        # ans = [1] * k 
+        t = (n-k) // 2 
+        x = t // k 
+        y = t % k 
+        ans = [1+2*x] * k 
+        for i in range(y):
+            ans[i] += 2 
+        return ans 
 
-def find(x):
-    cnt = -1 
-    while x:
-        x >>= 1
-        cnt += 1
-    return cnt 
 
-def func(nums):
-    res = 2**32 - 1 
-    for num in nums:
-        res &= num
-    return res 
-
-
-def calc(n,k,nums):
-    cnt = [0] * 32 
-    for i in range(n):
-        for j in range(30,-1,-1):
-            if (nums[i] & (1 << j)):
-                cnt[j] += 1
-    # calculate needed 1 in each bit pos  
-    ans = 0 
-    for i in range(30,-1,-1):
-        tmp = n - cnt[i] 
-        if tmp <= k:
-            k -= tmp 
-            ans += (1 << i)
-    return ans 
-
+def func(n,k):
+    if n < k:
+        return False 
+    if n % 2 == 0:
+        if n // 2 >= k:
+            return True 
+    if (n - k) % 2 == 0:
+        return True 
+    return False 
 
 
 if __name__ == "__main__":
     tn = II()
     for _ in range(tn):
         n,k = LII()
-        nums = LII()
-        print(calc(n,k,nums))
+        if not func(n,k):
+            print('NO')
+        else:
+            print('YES')
+            res = list(map(str,calc(n,k)))
+            print(' '.join(res))
+
+ 
