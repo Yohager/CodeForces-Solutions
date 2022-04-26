@@ -54,44 +54,36 @@ def LII():
 def GMI():
     return map(lambda x: int(x) - 1, input().split())
 
-def calc(n,k):
-    if n % 2 == 0 and n // 2 >= k:
-        t = n // 2
-        x = t // k 
-        y = t % k
-        ans = [2*x] * k 
-        for i in range(y):
-            ans[i] += 2
-        return ans 
-    elif (n-k) % 2 == 0:
-        # ans = [1] * k 
-        t = (n-k) // 2 
-        x = t // k 
-        y = t % k 
-        ans = [1+2*x] * k 
-        for i in range(y):
-            ans[i] += 2 
-        return ans 
+def MatI(n):
+    res = []
+    for _ in range(n):
+        res.append(LII())
+    return res 
 
+from collections import defaultdict
 
-def func(n,k):
-    if n < k:
-        return False 
-    if n % 2 == 0:
-        if n // 2 >= k:
-            return True 
-    if (n - k) % 2 == 0:
-        return True 
-    return False 
-
+def calc(n,k,nums):
+    d = defaultdict(int)
+    for num in nums:
+        d[num] += 1
+    s = list(d.keys())
+    if len(s) > k:
+        return -1 
+    else:
+        if len(s) == k:
+            return (10000 // len(s)) * s
+        else:
+            s = s + [1 for _ in range(k-len(s))]
+            return (10000 // len(s)) * s
 
 if __name__ == "__main__":
     tn = II()
     for _ in range(tn):
         n,k = LII()
-        if not func(n,k):
-            print('NO')
+        nums = LII()
+        res = calc(n,k,nums)
+        if res == -1:
+            print(res)
         else:
-            print('YES')
-            res = list(map(str,calc(n,k)))
-            print(' '.join(res))
+            print(len(res))
+            print(*res)

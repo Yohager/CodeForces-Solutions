@@ -54,44 +54,33 @@ def LII():
 def GMI():
     return map(lambda x: int(x) - 1, input().split())
 
-def calc(n,k):
-    if n % 2 == 0 and n // 2 >= k:
-        t = n // 2
-        x = t // k 
-        y = t % k
-        ans = [2*x] * k 
-        for i in range(y):
-            ans[i] += 2
-        return ans 
-    elif (n-k) % 2 == 0:
-        # ans = [1] * k 
-        t = (n-k) // 2 
-        x = t // k 
-        y = t % k 
-        ans = [1+2*x] * k 
-        for i in range(y):
-            ans[i] += 2 
-        return ans 
+def MatI(n):
+    res = []
+    for _ in range(n):
+        res.append(LII())
+    return res 
 
 
-def func(n,k):
-    if n < k:
-        return False 
-    if n % 2 == 0:
-        if n // 2 >= k:
-            return True 
-    if (n - k) % 2 == 0:
-        return True 
-    return False 
-
+def calc(n,nums):
+    '''
+    思路是先将数组排序
+    然后首尾交错添加进入结果数组中，最后逆序输出
+    '''
+    nums.sort()
+    idx = 0
+    res = []
+    for i in range(n):
+        if i % 2 == 0:
+            res.append(nums[idx])
+            idx += 1
+        else:
+            res.append(nums[-idx])
+    return reversed(res)
 
 if __name__ == "__main__":
     tn = II()
     for _ in range(tn):
-        n,k = LII()
-        if not func(n,k):
-            print('NO')
-        else:
-            print('YES')
-            res = list(map(str,calc(n,k)))
-            print(' '.join(res))
+        n = II()
+        nums = LII()
+        res = calc(n,nums)
+        print(*res)

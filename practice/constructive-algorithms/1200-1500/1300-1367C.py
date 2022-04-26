@@ -1,6 +1,7 @@
 import sys
 import os
 from io import BytesIO, IOBase
+from collections import Counter, defaultdict
 BUFSIZE = 8192
 class FastIO(IOBase):
     newlines = 0
@@ -54,44 +55,44 @@ def LII():
 def GMI():
     return map(lambda x: int(x) - 1, input().split())
 
-def calc(n,k):
-    if n % 2 == 0 and n // 2 >= k:
-        t = n // 2
-        x = t // k 
-        y = t % k
-        ans = [2*x] * k 
-        for i in range(y):
-            ans[i] += 2
-        return ans 
-    elif (n-k) % 2 == 0:
-        # ans = [1] * k 
-        t = (n-k) // 2 
-        x = t // k 
-        y = t % k 
-        ans = [1+2*x] * k 
-        for i in range(y):
-            ans[i] += 2 
-        return ans 
+def MatI(n):
+    res = []
+    for _ in range(n):
+        res.append(LII())
+    return res 
 
-
-def func(n,k):
-    if n < k:
-        return False 
-    if n % 2 == 0:
-        if n // 2 >= k:
-            return True 
-    if (n - k) % 2 == 0:
-        return True 
-    return False 
+def calc(n,k,arr):
+    idxs = []
+    for i in range(n):
+        if arr[i] == '1':
+            idxs.append(i)
+    if not idxs:
+        # 没有1
+        return (n+k) // (k+1)
+    # 统计头尾的情况
+    elif len(idxs) == 1:
+        # 只有一个1
+        l,r = idxs[0], n-idxs[0]-1
+        return max(0,l//(k+1)) + max(0,r//(k+1))
+    else:
+        # 超过两个1
+        tmp = []
+        for i in range(1,len(idxs)):
+            tmp.append(idxs[i]-idxs[i-1]-1)
+        ans = 0
+        for t in tmp:
+            cur = max(0,(t-k) // (k+1))
+            ans += cur
+        # 加上头尾
+        l,r = idxs[0], n-idxs[-1]-1
+        return ans + max(0,l//(k+1)) + max(0,r//(k+1))
+        
 
 
 if __name__ == "__main__":
     tn = II()
     for _ in range(tn):
         n,k = LII()
-        if not func(n,k):
-            print('NO')
-        else:
-            print('YES')
-            res = list(map(str,calc(n,k)))
-            print(' '.join(res))
+        nums = I()
+        res = calc(n,k,nums)
+        print(res)
