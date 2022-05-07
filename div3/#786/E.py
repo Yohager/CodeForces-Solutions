@@ -60,35 +60,31 @@ def MatI(n):
         res.append(LII())
     return res 
 
+import math 
+
 
 def calc(n,nums):
-    if n == 1:
-        return True 
-    if n % 2 == 0:
-        pre = -1 
-        for i in range(0,n,2):
-            if min(nums[i],nums[i+1]) >= pre:
-                pre = max(nums[i],nums[i+1])
-            else:
-                return False 
-    else:
-        pre = nums[0]
-        for i in range(1,n,2):
-            if min(nums[i],nums[i+1]) >= pre:
-                pre = max(nums[i],nums[i+1])
-            else:
-                return False 
-
-    return True
+    ans = float('inf')
+    # case 1 choose the minimum two positions
+    f,s = sorted(nums)[0], sorted(nums)[1]
+    ans = min(ans,math.ceil(f/2) + math.ceil(s/2))
+    # case 2 choose one pos and let the left and right to be zero 
+    for i in range(1,n-1):
+        ans = min(ans,math.ceil((nums[i-1]+nums[i+1])/2))
+    # case 3 choose two adjacent positions 
+    # choose the max one and decrease to the min one 
+    for i in range(1,n):
+        x,y = max(nums[i],nums[i-1]), min(nums[i],nums[i-1])
+        cur = min(x-y,math.ceil(x/2))
+        x -= 2*cur 
+        y -= cur 
+        if x > 0 and y > 0:
+            cur += math.ceil((x+y)/3)
+        ans = min(ans,cur)
+    return ans 
 
 if __name__ == "__main__":
-    tn = II()
-    for _ in range(tn):
-        n = II()
-        nums = LII()
-        res = calc(n,nums)
-        if res:
-            print('YES')
-        else:
-            print('NO')
-        
+    n = II()
+    nums = LII()
+    res = calc(n,nums)
+    print(res)
