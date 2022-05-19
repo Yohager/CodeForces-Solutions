@@ -1,7 +1,6 @@
 import sys
 import os
 from io import BytesIO, IOBase
-from tkinter import X
 BUFSIZE = 8192
 class FastIO(IOBase):
     newlines = 0
@@ -55,36 +54,35 @@ def LII():
 def GMI():
     return map(lambda x: int(x) - 1, input().split())
 
+def MatI(n):
+    res = []
+    for _ in range(n):
+        res.append(LII())
+    return res 
 
-from collections import defaultdict
-
-d = defaultdict(list)
-ANS = 0
-t = ''
-
-def dfs(v):
-    w,b = 0,0
-    global ANS 
-    if t[v] == 'W':
-        w += 1
-    else:
-        b += 1
-    for x in d[v]:
-        ww,bb = dfs(x)
-        w += ww 
-        b += bb  
-    if w == b:
-        ANS += 1
-    return w,b
-
-tn = II()
-for i in range(tn):
-    n = II()
-    nums = LII()
-    t = list(I())
-    d = defaultdict(list)
-    for x,y in enumerate(nums):
-        d[y-1].append(x+1)
-    ANS = 0
-    dfs(0)
-    print(ANS)
+def calc(s):
+    n = len(s)
+    if n == 1:
+        return 1
+    if '1' not in s and '0' not in s:
+        return n
+    a = [False] * (n+1)
+    b = [False] * (n+1)
+    a[0],b[0] = True, True 
+    for i in range(n):
+        if a[i] and (s[i] == '1' or s[i] == '?'):
+            a[i+1] = True 
+    for j in range(n,-1,-1):
+        if b[n-j-1] and (s[j] == '0' or s[j] == '?'):
+            b[n-j] = True 
+    ans = 0
+    for i in range(n):
+        if a[i] and b[n-i-1]:
+            ans += 1
+    return ans 
+if __name__ == "__main__":
+    tn = II()
+    for _ in range(tn):
+        cur = I()
+        res = calc(cur)
+        print(res)

@@ -55,17 +55,19 @@ def GMI():
     return map(lambda x: int(x) - 1, input().split())
 
 
-def calc(nums):
-    #print(nums)
-    return True if sum(nums[:3]) == sum(nums[3:]) else False 
+def calc(n,nums):
+    cnt = 0 
+    for i in range(n):
+        for j in range(i+1,n):
+            if nums[i] >= nums[j]:
+                cnt += 1
+    return cnt 
  
 
 if __name__ == "__main__":
     tn = II()
     for i in range(tn):
-        v = I()
-        nums = [int(x) for x in v]
-        if calc(nums):
-            print('YES')
-        else:
-            print('NO')
+        n = II()
+        nums = LII()
+        res = calc(n,nums)
+        print(res)

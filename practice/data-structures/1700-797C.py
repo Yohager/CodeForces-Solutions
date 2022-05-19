@@ -1,7 +1,6 @@
 import sys
 import os
 from io import BytesIO, IOBase
-from tkinter import X
 BUFSIZE = 8192
 class FastIO(IOBase):
     newlines = 0
@@ -56,35 +55,28 @@ def GMI():
     return map(lambda x: int(x) - 1, input().split())
 
 
-from collections import defaultdict
+def calc(s):
+    d = {}
+    for x in s:
+        d[x] = d.get(x,0) + 1
+    idx = 0
+    n = len(s)
+    ans = []
+    stack = []
+    while idx < n:
+        d[s[idx]] -= 1 
+        if d[s[idx]] <= 0:
+            d.pop(s[idx])
+        stack.append(s[idx])
+        while stack and d and stack[-1] <= sorted(list(d.keys()))[0]:
+            ans.append(stack.pop())
+        idx += 1
+    while stack:
+        ans.append(stack.pop())
+    return ans 
 
-d = defaultdict(list)
-ANS = 0
-t = ''
 
-def dfs(v):
-    w,b = 0,0
-    global ANS 
-    if t[v] == 'W':
-        w += 1
-    else:
-        b += 1
-    for x in d[v]:
-        ww,bb = dfs(x)
-        w += ww 
-        b += bb  
-    if w == b:
-        ANS += 1
-    return w,b
-
-tn = II()
-for i in range(tn):
-    n = II()
-    nums = LII()
-    t = list(I())
-    d = defaultdict(list)
-    for x,y in enumerate(nums):
-        d[y-1].append(x+1)
-    ANS = 0
-    dfs(0)
-    print(ANS)
+if __name__ == "__main__":
+    s = list(I())
+    ans = calc(s)
+    print(''.join(ans))

@@ -1,7 +1,6 @@
 import sys
 import os
 from io import BytesIO, IOBase
-from tkinter import X
 BUFSIZE = 8192
 class FastIO(IOBase):
     newlines = 0
@@ -56,35 +55,41 @@ def GMI():
     return map(lambda x: int(x) - 1, input().split())
 
 
-from collections import defaultdict
+def calc(nums):
+    if not nums:
+        return 0
+    ans = 0
+    def mergesort(arr):
+        if len(arr) == 1:
+            return arr
+        m = len(arr) // 2
+        return mergefunc(mergesort(arr[:m]),mergesort(arr[m:]))
+    
+    def mergefunc(l,r):
+        nonlocal ans 
+        res = []
+        i,j = 0,0
+        cnt = 0
+        while i < len(l) and j < len(r):
+            if l[i] >= r[j]:
+                res.append(r[j])
+                ans += len(l) - i
+                j += 1
+            else:
+                res.append(l[i])
+                i += 1
+        res += l[i:]
+        res += r[j:]
+        return res 
+    # print(mergesort(nums))
+    mergesort(nums)
+    return ans 
 
-d = defaultdict(list)
-ANS = 0
-t = ''
 
-def dfs(v):
-    w,b = 0,0
-    global ANS 
-    if t[v] == 'W':
-        w += 1
-    else:
-        b += 1
-    for x in d[v]:
-        ww,bb = dfs(x)
-        w += ww 
-        b += bb  
-    if w == b:
-        ANS += 1
-    return w,b
-
-tn = II()
-for i in range(tn):
-    n = II()
-    nums = LII()
-    t = list(I())
-    d = defaultdict(list)
-    for x,y in enumerate(nums):
-        d[y-1].append(x+1)
-    ANS = 0
-    dfs(0)
-    print(ANS)
+if __name__ == "__main__":
+    tn = II()
+    for _ in range(tn):
+        n = II()
+        nums = LII()
+        res = calc(nums)
+        print(res)
